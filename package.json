@@ -1,0 +1,59 @@
+{
+  "name": "rustpress-sdk",
+  "version": "1.0.0",
+  "description": "Official JavaScript SDK for RustPress - Build hooks, plugins, themes, and apps",
+  "main": "src/index.js",
+  "module": "src/index.mjs",
+  "exports": {
+    ".": {
+      "import": "./src/index.mjs",
+      "require": "./src/index.js"
+    },
+    "./hooks": {
+      "import": "./src/hooks.mjs",
+      "require": "./src/hooks.js"
+    },
+    "./plugins": {
+      "import": "./src/plugins.mjs",
+      "require": "./src/plugins.js"
+    }
+  },
+  "scripts": {
+    "test": "jest",
+    "test:coverage": "jest --coverage",
+    "lint": "eslint src",
+    "docs": "jsdoc -c jsdoc.json"
+  },
+  "keywords": [
+    "rustpress",
+    "cms",
+    "sdk",
+    "javascript",
+    "hooks",
+    "plugins",
+    "themes"
+  ],
+  "author": "RustPress Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rustpress/rustpress-sdk-js"
+  },
+  "homepage": "https://rustpress.dev/docs/sdk/javascript",
+  "bugs": {
+    "url": "https://github.com/rustpress/rustpress-sdk-js/issues"
+  },
+  "devDependencies": {
+    "jest": "^29.0.0",
+    "eslint": "^8.56.0",
+    "jsdoc": "^4.0.0"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "files": [
+    "src",
+    "README.md",
+    "LICENSE"
+  ]
+}
