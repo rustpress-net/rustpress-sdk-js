@@ -106,6 +106,65 @@ class MyPlugin extends BasePlugin {
 module.exports = new MyPlugin();
 ```
 
+### Creating a Theme
+
+```javascript
+const { BaseTheme } = require('rustpress-sdk');
+
+class MyTheme extends BaseTheme {
+  constructor() {
+    super('my-theme', {
+      name: 'My Theme',
+      version: '1.0.0',
+      description: 'A beautiful theme',
+      supports: ['dark-mode', 'custom-colors'],
+    });
+  }
+
+  async onActivate(context) {
+    this.log('info', 'Theme activated');
+  }
+
+  async onDeactivate() {
+    this.log('info', 'Theme deactivated');
+  }
+}
+
+module.exports = new MyTheme();
+```
+
+### Creating an App
+
+```javascript
+const { BaseApp } = require('rustpress-sdk');
+
+class MyApp extends BaseApp {
+  constructor() {
+    super('my-app', {
+      name: 'My App',
+      version: '1.0.0',
+      description: 'A custom app',
+      icon: 'dashboard',
+      menu: {
+        title: 'My App',
+        icon: 'dashboard',
+        position: 'sidebar',
+      },
+    });
+  }
+
+  async onActivate(context) {
+    this.log('info', 'App activated');
+  }
+
+  async onDeactivate() {
+    this.log('info', 'App deactivated');
+  }
+}
+
+module.exports = new MyApp();
+```
+
 ## API Reference
 
 ### Trigger Utilities

@@ -289,6 +289,222 @@ class BasePlugin {
   }
 }
 
+/**
+ * @typedef {Object} ThemeMetadata
+ * @property {string} name - Theme display name
+ * @property {string} version - Theme version
+ * @property {string} [description] - Theme description
+ * @property {string} [author] - Theme author
+ * @property {string} [screenshot] - Theme screenshot URL
+ * @property {string[]} [supports] - Supported features
+ */
+
+/**
+ * Base class for RustPress themes
+ */
+class BaseTheme {
+  /**
+   * @param {string} id - Theme ID
+   * @param {ThemeMetadata} metadata - Theme metadata
+   */
+  constructor(id, metadata) {
+    this.id = id;
+    this.metadata = metadata;
+    this._context = null;
+  }
+
+  /**
+   * Called when the theme is activated
+   * @param {Object} context - Theme context
+   * @returns {Promise<void>}
+   */
+  async activate(context) {
+    this._context = context;
+    await this.onActivate(context);
+  }
+
+  /**
+   * Called when the theme is deactivated
+   * @returns {Promise<void>}
+   */
+  async deactivate() {
+    await this.onDeactivate();
+    this._context = null;
+  }
+
+  /**
+   * Override this method to add activation logic
+   * @param {Object} context - Theme context
+   * @returns {Promise<void>}
+   */
+  async onActivate(context) {
+    // Override in subclass
+  }
+
+  /**
+   * Override this method to add deactivation logic
+   * @returns {Promise<void>}
+   */
+  async onDeactivate() {
+    // Override in subclass
+  }
+
+  /**
+   * Get asset URL
+   * @param {string} path - Asset path
+   * @returns {string}
+   */
+  asset(path) {
+    if (this._context) {
+      return this._context.assets.url(path);
+    }
+    return path;
+  }
+
+  /**
+   * Render a partial template
+   * @param {string} name - Partial name
+   * @param {Object} [data] - Template data
+   * @returns {Promise<string>}
+   */
+  async partial(name, data = {}) {
+    if (this._context) {
+      return this._context.partials.render(name, data);
+    }
+    return '';
+  }
+
+  /**
+   * Log a message
+   * @param {string} level - Log level
+   * @param {string} message - Log message
+   * @param {Object} [context] - Additional context
+   */
+  log(level, message, context = {}) {
+    if (this._context) {
+      this._context.logger[level](message, { theme: this.id, ...context });
+    }
+  }
+}
+
+/**
+ * @typedef {Object} AppMetadata
+ * @property {string} name - App display name
+ * @property {string} version - App version
+ * @property {string} [description] - App description
+ * @property {string} [author] - App author
+ * @property {string} [icon] - App icon URL
+ * @property {string[]} [permissions] - Required permissions
+ * @property {Object} [menu] - Menu configuration
+ * @property {Array} [routes] - App routes
+ */
+
+/**
+ * Base class for RustPress apps
+ */
+class BaseApp {
+  /**
+   * @param {string} id - App ID
+   * @param {AppMetadata} metadata - App metadata
+   */
+  constructor(id, metadata) {
+    this.id = id;
+    this.metadata = metadata;
+    this._context = null;
+  }
+
+  /**
+   * Called when the app is activated
+   * @param {Object} context - App context
+   * @returns {Promise<void>}
+   */
+  async activate(context) {
+    this._context = context;
+    await this.onActivate(context);
+  }
+
+  /**
+   * Called when the app is deactivated
+   * @returns {Promise<void>}
+   */
+  async deactivate() {
+    await this.onDeactivate();
+    this._context = null;
+  }
+
+  /**
+   * Override this method to add activation logic
+   * @param {Object} context - App context
+   * @returns {Promise<void>}
+   */
+  async onActivate(context) {
+    // Override in subclass
+  }
+
+  /**
+   * Override this method to add deactivation logic
+   * @returns {Promise<void>}
+   */
+  async onDeactivate() {
+    // Override in subclass
+  }
+
+  /**
+   * Navigate to a path
+   * @param {string} path - Path to navigate to
+   */
+  navigate(path) {
+    if (this._context) {
+      this._context.navigate(path);
+    }
+  }
+
+  /**
+   * Show a notification
+   * @param {Object} notification - Notification data
+   */
+  showNotification(notification) {
+    if (this._context) {
+      this._context.showNotification(notification);
+    }
+  }
+
+  /**
+   * Show a toast message
+   * @param {string} message - Toast message
+   * @param {'info'|'success'|'warning'|'error'} [type='info'] - Toast type
+   */
+  showToast(message, type = 'info') {
+    if (this._context) {
+      this._context.showToast(message, type);
+    }
+  }
+
+  /**
+   * Show a dialog
+   * @param {Object} options - Dialog options
+   * @returns {Promise<Object>}
+   */
+  async showDialog(options) {
+    if (this._context) {
+      return this._context.showDialog(options);
+    }
+    return { confirmed: false };
+  }
+
+  /**
+   * Log a message
+   * @param {string} level - Log level
+   * @param {string} message - Log message
+   * @param {Object} [context] - Additional context
+   */
+  log(level, message, context = {}) {
+    if (this._context) {
+      this._context.logger[level](message, { app: this.id, ...context });
+    }
+  }
+}
+
 // =============================================================================
 // Trigger Pattern Utilities
 // =============================================================================
@@ -600,8 +816,10 @@ module.exports = {
   beforeHook,
   afterHook,
 
-  // Plugin base class
+  // Base classes
   BasePlugin,
+  BaseTheme,
+  BaseApp,
 
   // Trigger utilities
   parseTrigger,
