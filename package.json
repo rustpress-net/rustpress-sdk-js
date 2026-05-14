@@ -3,20 +3,11 @@
   "version": "1.0.0",
   "description": "Official JavaScript SDK for RustPress - Build hooks, plugins, themes, and apps",
   "main": "src/index.js",
-  "module": "src/index.mjs",
   "exports": {
-    ".": {
-      "import": "./src/index.mjs",
-      "require": "./src/index.js"
-    },
-    "./hooks": {
-      "import": "./src/hooks.mjs",
-      "require": "./src/hooks.js"
-    },
-    "./plugins": {
-      "import": "./src/plugins.mjs",
-      "require": "./src/plugins.js"
-    }
+    ".": "./src/index.js",
+    "./hooks": "./src/hooks.js",
+    "./plugins": "./src/plugins.js",
+    "./package.json": "./package.json"
   },
   "bin": {
     "rustpress": "./bin/rustpress.js"
@@ -26,6 +17,15 @@
     "test:coverage": "jest --coverage",
     "lint": "eslint src",
     "docs": "jsdoc -c jsdoc.json"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "testMatch": [
+      "**/__tests__/**/*.test.js"
+    ],
+    "collectCoverageFrom": [
+      "src/**/*.js"
+    ]
   },
   "keywords": [
     "rustpress",
